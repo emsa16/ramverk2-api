@@ -1,7 +1,7 @@
 {
-  "name": "ramverk2-me",
+  "name": "ramverk2-api",
   "version": "2.0.1",
-  "description": "Me page for ramverk2",
+  "description": "Backend for ramverk2",
   "main": "app.js",
   "scripts": {
     "test": "make test",
@@ -17,21 +17,19 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/emsa16/ramverk2-me.git"
+    "url": "git+https://github.com/emsa16/ramverk2-api.git"
   },
   "author": "Emil Sandberg",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/emsa16/ramverk2-me/issues"
+    "url": "https://github.com/emsa16/ramverk2-api/issues"
   },
-  "homepage": "https://github.com/emsa16/ramverk2-me#readme",
+  "homepage": "https://github.com/emsa16/ramverk2-api#readme",
   "devDependencies": {
     "clean-css-cli": "^4.2.1",
     "codecov": "^3.1.0",
     "coveralls": "^3.0.2",
     "eslint": "^5.12.1",
-    "eslint-plugin-pug": "^1.1.1",
-    "eslint-plugin-react": "^7.12.4",
     "html-minifier": "^3.5.21",
     "htmlhint": "^0.10.1",
     "js-yaml": "^3.12.1",
@@ -48,9 +46,7 @@
     "cors": "^2.8.5",
     "debug": "~2.6.9",
     "express": "^4.16.4",
-    "jstransformer-markdown-it": "^2.1.0",
     "morgan": "^1.9.1",
-    "pug": "2.0.0-beta11",
     "serve-favicon": "~2.4.5"
   }
 }

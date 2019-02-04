@@ -4,35 +4,25 @@
 var express = require('express');
 var router = express.Router();
 
-var navbarItems = {
-    "Hem": "/",
-    "Om": "/about",
-    "Redovisning": "/report"
-};
+// JSON API
+router.get("/", (req, res) => {
+    const data = {
+        data: {
+            msg: "JSON API"
+        }
+    };
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-    res.render('index', {
-        title: 'Hem',
-        current: '/',
-        navbar: navbarItems
-    });
+    res.json(data);
 });
 
-router.get('/about', function(req, res, next) {
-    res.render('about', {
-        title: 'Om',
-        current: "/about",
-        navbar: navbarItems
-    });
-});
+router.get("/author", (req, res) => {
+    const data = {
+        data: {
+            msg: "Emil Sandberg"
+        }
+    };
 
-router.get('/report', function(req, res, next) {
-    res.render('report', {
-        title: 'Redovisningar',
-        current: '/report',
-        navbar: navbarItems
-    });
+    res.json(data);
 });
 
 module.exports = router;
