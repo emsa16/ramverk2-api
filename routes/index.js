@@ -1,4 +1,4 @@
-/*eslint no-unused-vars: "off"*/
+/*eslint no-unused-vars: "off", max-len: ["error", { "ignoreStrings": true }]*/
 "use strict";
 
 var express = require('express');
