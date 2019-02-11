@@ -20,16 +20,16 @@ Såväl `npm` som `make` är möjliga att köra tillsammans med kommandona `inst
     $ [env DBWEBB_PORT=XXXX] npm start     # DBWEBB_PORT anger vilken port servern körs på, default är 3000
 
 ## Köra projektet i Docker
-    $ npm run|make node1            # node 9-alpine
-    $ npm run|make node2            # node 8-alpine
-    $ npm run|make node3            # node 6-alpine
-    $ npm run|make docker-start     # Kör alla tre containers
+    $ npm run|make node1            # node 9-alpine (port 8093)
+    $ npm run|make node2            # node 8-alpine (port 8089)
+    $ npm run|make node3            # node 6-alpine (port 8061)
+    $ npm run|make docker-start     # Kör alla tre containers  (se portar ovan)
     $ npm run|make docker-stop      # Stoppar alla aktiva containers
     $ npm run|make docker-build     # Bygger ovan nämnda images från respektive Dockerfile
 
 Alla dessa kommandon kan alltså också köras med både `make` och `npm run`.
 
 ## Ladda ner projektets image
-https://store.docker.com/community/images/emsa16/ramverk2-api
+https://store.docker.com/community/images/emsa16/ramverk2-me
 
 BTH 2019
