@@ -2,9 +2,9 @@
 
 [![Build Status](https://travis-ci.org/emsa16/ramverk2-api.svg?branch=master)](https://travis-ci.org/emsa16/ramverk2-api)
 [![CircleCI](https://circleci.com/gh/emsa16/ramverk2-api.svg?style=svg)](https://circleci.com/gh/emsa16/ramverk2-api)
-[![Maintainability](https://api.codeclimate.com/v1/badges/e01f59ff40dc859e5645/maintainability)](https://codeclimate.com/github/emsa16/ramverk2-api/maintainability)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/e01f59ff40dc859e5645/test_coverage)](https://codeclimate.com/github/emsa16/ramverk2-api/test_coverage)
-[![BCH compliance](https://bettercodehub.com/edge/badge/emsa16/ramverk2-api?branch=master)](https://bettercodehub.com/)
+[![Maintainability](https://api.codeclimate.com/v1/badges/05c9f378777ee2bf5a75/maintainability)](https://codeclimate.com/github/emsa16/ramverk2-api/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/05c9f378777ee2bf5a75/test_coverage)](https://codeclimate.com/github/emsa16/ramverk2-api/test_coverage)
+[![BCH compliance](https://bettercodehub.com/edge/badge/emsa16/ramverk2-api?branch=master)](https://bettercodehub.com/results/emsa16/ramverk2-api)
 
 ## Installera projektet
 Detta är ett node.js-projekt, så det kräver att node är installerat.
