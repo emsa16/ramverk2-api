@@ -1,23 +1,32 @@
 version: "3"
 services:
-    node9:
-        image: "emsa16/ramverk2-me:node9"
+    node-latest:
+        image: "emsa16/ramverk2-me:node-latest"
         build:
             context: .
-            dockerfile: node9/Dockerfile
+            dockerfile: docker/Dockerfile-node-latest
         ports:
-            - "8093:8099"
-    node8:
-        image: "emsa16/ramverk2-me:node8"
+            - "8110:8099"
+        volumes:
+            - ./:/home/node/app
+            - /home/node/app/node_modules/
+    node-10:
+        image: "emsa16/ramverk2-me:node-10"
         build:
             context: .
-            dockerfile: node8/Dockerfile
+            dockerfile: docker/Dockerfile-node-10
         ports:
-            - "8089:8099"
-    node6:
-        image: "emsa16/ramverk2-me:node6"
+            - "8100:8099"
+        volumes:
+            - ./:/home/node/app
+            - /home/node/app/node_modules/
+    node-8:
+        image: "emsa16/ramverk2-me:node-8"
         build:
             context: .
-            dockerfile: node6/Dockerfile
+            dockerfile: docker/Dockerfile-node-8
         ports:
-            - "8061:8099"
+            - "8080:8099"
+        volumes:
+            - ./:/home/node/app
+            - /home/node/app/node_modules/

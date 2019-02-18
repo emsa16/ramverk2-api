@@ -11,12 +11,12 @@
     "clean": "rm -rf build cache/*/* npm-debug.log coverage",
     "preclean-all": "npm run clean",
     "clean-all": "rm -rf .bin vendor node_modules",
-    "pretest": "npm run stylelint && npm run eslint",
+    "pretest": "npm run htmlhint && npm run stylelint && npm run eslint",
     "test": "jest --coverage",
     "start": "nodemon ./bin/www",
     "production": "NODE_ENV='production' node ./bin/www",
     "tag-prepare": "grep version package.json && git describe --abbrev=0 && git status",
-    "htmlhint": "[ ! -f .htmlhintrc ] || htmlhint --ignore build/**,node_modules/** | grep -v 'Config loaded:'",
+    "htmlhint": "[ ! -f .htmlhintrc ] || htmlhint --ignore build/**,node_modules/**,coverage/** | grep -v 'Config loaded:'",
     "stylelint": "[ ! -f .stylelintrc.json ] || stylelint **/*.css",
     "stylelint-fix": "[ ! -f .stylelintrc.json ] || stylelint **/*.css --fix",
     "eslint": "[ ! -f .eslintrc.json ] || eslint .",
@@ -25,9 +25,19 @@
     "docker-push": "docker-compose push",
     "docker-start": "docker-compose up -d",
     "docker-stop": "docker-compose down",
-    "node1": "docker-compose up -d node9",
-    "node2": "docker-compose up -d node8",
-    "node3": "docker-compose up -d node6"
+    "node1": "docker-compose up -d node-latest",
+    "node2": "docker-compose up -d node-10",
+    "node3": "docker-compose up -d node-8",
+    "test1": "docker-compose run node-latest npm test",
+    "test2": "docker-compose run node-10 npm test",
+    "test3": "docker-compose run node-8 npm test"
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "**/*.js",
+      "!**/node_modules/**",
+      "!**/coverage/**"
+    ]
   },
   "repository": {
     "type": "git",
