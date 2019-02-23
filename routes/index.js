@@ -11,6 +11,7 @@ router.get("/", (req, res) => {
         routes: [
             "index",
             "about",
+            "app",
             "reports"
         ]
     };
@@ -29,6 +30,14 @@ router.get("/index", (req, res) => {
 router.get("/about", (req, res) => {
     const data = {
         msg: '<h1>Om denna sida</h1><p><img src="img/1200px-Node.js_logo.svg.png" alt="Node.js logo"></p><p>Denna sida är byggd med React och Express. React servas som statiskt innehåll på me.emilsandberg.com och Express kör på api.emilsandberg.com, där alla texter för de olika sidorna ligger lagrade.</p><p>Denna sida är en del av kursen <a href="https://dbwebb.se/kurser/ramverk2"><em>ramverk2</em></a> på Blekinge Tekniska Högskola.</p><p>Kursen omfattar:</p><ul><li>Virtualisering med Docker för utveckling, test och driftsättning.</li><li>Ramverksbaserade serverlösning, backend med JavaScript/PHP.</li><li>Frontendlösningar med web, SPA (single page application) och desktop.</li><li>Kopplingar mot databaser.</li><li>Testdriven utveckling och tekniker för enhetstestning.</li><li>Automatiserad testning och byggning.</li><li>Driftsättning och innebörden av devops.</li><li>Relaterade verktyg och tekniker.</li></ul><p><a href="https://github.com/emsa16/ramverk2-me">Denna sida på Github</a></p>'
+    };
+
+    res.json(data);
+});
+
+router.get("/app", (req, res) => {
+    const data = {
+        msg: '<h1>Realtime game app</h1><p>Exakt innehåll och format är ännu oklart, men någon form av realtidsspel med flera simultanspelare är tanken. Om realtidsdelen krånglar så är det möjligt att det istället blir ett mer statiskt spel med en tillhörande chatt.</p><p>Appen har två separata delar, en frontend och en backend. Backend är byggd i Express och tanken är att den ska erbjuda någon form av data och/eller komputationer genom ett REST API. Frontend är gjord i React och är tänkt till webbläsare för mobil och desktop.</p><p>Än så länge finns det endast skelett för frontend och backend och appen är inte uppe och snurrar någonstans.</p><p><a href="https://github.com/emsa16/realtimegame-frontend">Frontend-repo</a></p><p><a href="https://github.com/emsa16/realtimegame-backend">Backend-repo</a></p>'
     };
 
     res.json(data);
