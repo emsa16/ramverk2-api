@@ -1,6 +1,6 @@
 {
   "name": "ramverk2-api",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Backend for ramverk2",
   "main": "app.js",
   "directories": {
