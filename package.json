@@ -10,7 +10,7 @@
     "preinstall": "([ -d .bin ] || mkdir .bin) && ([ -d build ] || mkdir build) && rm -rf build/*",
     "clean": "rm -rf build cache/*/* npm-debug.log coverage",
     "preclean-all": "npm run clean",
-    "clean-all": "rm -rf .bin vendor node_modules",
+    "clean-all": "rm -rf .bin vendor node_modules package-lock.json",    
     "pretest": "npm run htmlhint && npm run stylelint && npm run eslint",
     "test": "jest --coverage",
     "start": "nodemon ./bin/www",
@@ -68,6 +68,9 @@
     "debug": "~2.6.9",
     "express": "^4.16.4",
     "morgan": "^1.9.1",
-    "serve-favicon": "~2.4.5"
+    "serve-favicon": "~2.4.5",
+    "bcrypt": "^3.0.4",
+    "jsonwebtoken": "^8.5.0",
+    "mongodb": "^3.1.13"
   }
 }
