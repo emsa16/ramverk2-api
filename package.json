@@ -10,7 +10,7 @@
     "preinstall": "([ -d .bin ] || mkdir .bin) && ([ -d build ] || mkdir build) && rm -rf build/*",
     "clean": "rm -rf build cache/*/* npm-debug.log coverage",
     "preclean-all": "npm run clean",
-    "clean-all": "rm -rf .bin vendor node_modules package-lock.json",    
+    "clean-all": "rm -rf .bin vendor node_modules package-lock.json",
     "pretest": "npm run htmlhint && npm run stylelint && npm run eslint",
     "test": "jest --coverage",
     "start": "nodemon ./bin/www",
@@ -28,6 +28,7 @@
     "node1": "docker-compose up -d node-latest",
     "node2": "docker-compose up -d node-10",
     "node3": "docker-compose up -d node-8",
+    "mongo": "docker-compose up -d mongodb",
     "test1": "docker-compose run node-latest npm test",
     "test2": "docker-compose run node-10 npm test",
     "test3": "docker-compose run node-8 npm test"
