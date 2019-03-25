@@ -5,31 +5,46 @@ services:
         build:
             context: .
             dockerfile: docker/Dockerfile-node-latest
+        environment:
+            - DBWEBB_DSN=mongodb://mongodb:27017/meapp
+            - JWT_SECRET=ft%J!Rt#BA*4R_K^PqxKX@MBw+&aqXn5w5H?5U^Yf98PqzDsRwgQCg#gcfT@92Ay
         ports:
             - "8110:8099"
         volumes:
             - ./:/home/node/app
             - /home/node/app/node_modules/
+        links:
+            - mongodb
     node-10:
         image: "emsa16/ramverk2-me:node-10"
         build:
             context: .
             dockerfile: docker/Dockerfile-node-10
+        environment:
+            - DBWEBB_DSN=mongodb://mongodb:27017/meapp
+            - JWT_SECRET=ft%J!Rt#BA*4R_K^PqxKX@MBw+&aqXn5w5H?5U^Yf98PqzDsRwgQCg#gcfT@92Ay
         ports:
             - "8100:8099"
         volumes:
             - ./:/home/node/app
             - /home/node/app/node_modules/
+        links:
+            - mongodb
     node-8:
         image: "emsa16/ramverk2-me:node-8"
         build:
             context: .
             dockerfile: docker/Dockerfile-node-8
+        environment:
+            - DBWEBB_DSN=mongodb://mongodb:27017/meapp
+            - JWT_SECRET=ft%J!Rt#BA*4R_K^PqxKX@MBw+&aqXn5w5H?5U^Yf98PqzDsRwgQCg#gcfT@92Ay
         ports:
             - "8080:8099"
         volumes:
             - ./:/home/node/app
             - /home/node/app/node_modules/
+        links:
+            - mongodb
     mongodb:
         image: mongo
         environment:
