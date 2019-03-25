@@ -1,18 +1,13 @@
 /**
- * Authentication
+ * Authentication module
  */
 "use strict";
 
 const db = require('./db.js');
-
-//bcrypt
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
-
 const jwt = require('jsonwebtoken');
 const jwtSecret = process.env.JWT_SECRET;
-
-
 
 const auth = {
     register: async function(res, body) {
@@ -34,8 +29,6 @@ const auth = {
         console.log("new user registered");
         return res.status(201).json({message: "User registered"});
     },
-
-
 
     login: async function(res, body) {
         const username = body.username;
@@ -66,20 +59,12 @@ const auth = {
         return res.json({token: token});
     },
 
-
-
     checkToken: async function(req, res, next) {
         const token = req.headers['x-access-token'];
 
         if (!token) {
             console.log("Missing token");
             return res.status(401).json({message: "Missing token"});
-            // errors: {
-            //     status: 401,
-            //     source: req.path,
-            //     title: "No token",
-            //     detail: "No token provided in request headers"
-            // }
         }
 
         jwt.verify(token, jwtSecret, async function(err, decoded) {
@@ -99,17 +84,12 @@ const auth = {
                 }
 
                 console.log("Valid token");
-                // req.user = {};
-                // req.user.email = decoded.email;
                 next();
-                // return undefined;
             } else {
                 console.log("Missing uid");
             }
         });
     }
 };
-
-
 
 module.exports = auth;

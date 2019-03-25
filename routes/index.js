@@ -1,8 +1,11 @@
 /*eslint no-unused-vars: "off", max-len: ["error", { "ignoreStrings": true }]*/
 "use strict";
 
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
+
+const auth = require('../models/auth');
+const report = require('../models/report');
 
 // JSON API
 router.get("/", (req, res) => {
@@ -12,6 +15,8 @@ router.get("/", (req, res) => {
             "index",
             "about",
             "app",
+            "login",
+            "register",
             "reports"
         ]
     };
@@ -43,53 +48,134 @@ router.get("/app", (req, res) => {
     res.json(data);
 });
 
+router.get('/register', async (req, res) => {
+    res.status(405).json({msg: "This route only supports POST requests."});
+});
+
+router.post('/register', async (req, res) => {
+    try {
+        auth.register(res, req.body);
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({message: err});
+    }
+});
+
+router.get('/login', async (req, res) => {
+    res.status(405).json({msg: "This route only supports POST requests."});
+});
+
+router.post('/login', async (req, res) => {
+    try {
+        auth.login(res, req.body);
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({message: err});
+    }
+});
+
+//Just to test that token is valid and working
+router.get('/secret',
+    async (req, res, next) => {
+        try {
+            auth.checkToken(req, res, next);
+        } catch (err) {
+            console.log(err);
+            res.status(500).json({message: err});
+        }
+    },
+    async (req, res) => {
+        try {
+            res.json({msg: "Secret content"});
+        } catch (err) {
+            console.log(err);
+            res.status(500).json({message: err});
+        }
+    }
+);
+
 router.get("/reports", (req, res) => {
-    const data = {
-        title: "Redovisningar",
-        routes: [
-            "kmom01",
-            "kmom02",
-            "kmom03"
-        ]
-    };
-
-    res.json(data);
+    try {
+        report.getAll(res);
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({message: err});
+    }
 });
 
-router.get("/reports/kmom01", (req, res) => {
-    const data = {
-        title: 'Kursmoment 01',
-        content: '<p>Äntligen är jag igång med denna kurs, efter att ha kämpat med diverse andra kurser. Dessvärre får jag hålla ambitionsnivån låg nu då tiden är knapp och jag måste få in detta innan 3-veckorsuppropet. Med detta inte sagt att jag inte lagt tid på detta moment och försökt en hel del. Jag ville gärna använda mig av React och drog ner det. Jag fick också igång React på en egen port och kunde även få den att kommunicera med min Express-server om den låg och snurrade på en annan port. Dock kunde jag inte komma vidare och smälta samman dessa två delar. Jag följde ett flertal guider men kunde inte hitta någon som gjorde det jag ville på ett sätt som inte kändes väldigt komplicerat. Jag antar väl ändå att det inte är tanken att man ska ockupera två portar bara för att kunna köra både React och Express? Jag försökte se på hur andra studenter lyckats lösa det men blev inte klokare av det och fick till slut tyvärr ge upp, vilket kändes tungt. Jag hoppas ändå att jag kan återkomma senare under kursen med React och låta den ersätta Pug.</p><p>Även i övrigt har jag varit tvungen att hoppa över alla teknikval i detta skede, utöver de redan givna Express och Pug, även om jag tror att det skulle vara väldigt nyttigt att lära sig sådant som React, Gulp, webpack och dylikt. Jag hade heller ej tid att sätta mig in i att starta upp en egen server för Express-applikationen. Senare ämnar jag dock försöka med att starta upp en egen server på min nyligen införskaffade Raspberry Pi, eller nåt liknande.</p><p>Jag har i alla fall lyckats med att starta upp min Express-applikation på nodejs2-servern på port 8099. Förhoppningsvis ligger den kvar där ännu i läsande stund.</p><h3>Berätta utförligt om din syn på Express och Pug och hur de samverkar. Relatera till andra ramverk du jobbat med. Lyft fram de fördelar och eventuellt nackdelar du finner, eller bara notera skillnader och likheter.</h3><p>Det jag bäst kan jämföra Express med är Anax och Flask som jag jobbat med i tidigare kurser. Flask använder sig också av en egen server som man startar genom att köra ett app-skript. Jag har endast använt Flask för ganska enkla syften så strukturen på de projekten är enklare än den som jag har i Express. Till exempel så har jag min router i en egen mapp i Express, samt har innehåll och layout separerat. Jag ser dock inte detta som skillnader mellan de två ramverken nödvändigtvis utan bara min implementation av dem.</p><p>Anax innehåller ingen server-applikation men är i övrigt mycket lik Express till filstruktur, med content- och view-mappar, samt en app-container som samlar ramverkets alla tjänster. Pakethanteringen är också snarlik med npm för Javascript och Composer för PHP. Alla tre ramverk har en mapp som samlar publika statiska filer såsom bilder, stylesheets och skript; i Anax kallas den htdocs och i de andra public.</p><p>Sammanfattningsvis så verkar Express så här i början inte så olikt andra ramverk jag använt. De största skillnaderna kommer av att de är skrivna i olika språk och därmed fungerar på lite olika sätt. Framförallt gäller detta PHP som måste exekveras på serversidan i motsats till andra språk.</p><p>Pug känns ganska snarlikt andra template-språk. Det är det renaste template-språket jag sett så det är ganska lättläst, även om det kanske är lite ovant i början. Funktionaliteten verkar vara i klass med andra template-språk såsom Handlebars. Med ett templatespråk så blir det klart att man flyttar över logiken någon annanstans, t.ex. till routern, medan man med PHP har valet att blanda presentation med logik lite som man själv vill, fast även med PHP så är det rekommenderat att separera dessa saker, t.ex. med MVC-modellen.</p><h3>Berätta om din katalogstruktur och hur du organiserade din kod, hur tänkte du?</h3><p>Eftersom jag utgick ifrån express-generator-tjänsten så fick jag med en gång en bra struktur på mitt projekt. Jag har en public-mapp som innehåller mina stylesheets, bilder och js-skript som ska skickas med till klienten. Routes-mappen innehåller hanteringen av router och views mina vyer. Dessutom har jag lagt till en content-mapp där jag har markdown-filer med rent innehåll, som jag sedan importerar från mina vyer. Jag är inte så nöjd med att ha olika vy-filer för varje rutt, när vyerna jag just nu har är identiska till sin struktur. Jag kunde dock inte hitta något sätt att använda dynamiska paths i mitt include-statement, så därför är det så nu. Dock tror jag att jag, när sidan växer, kommer att förändra strukturen. Framförallt så har jag ingen config-mapp nu, men om komplexiteten ökar så kan jag vilja placera config-detaljer på ett eget ställe.</p><p>Det mesta kändes bekant då jag kunde åstadkomma en struktur snarlik den jag använt i Anax. Det var endast ganska små justeringar som behövde göras för att anpassa samma tänk till Express-generatorns katalogstruktur.</p><h3>Använde du någon form av scaffolding som Express erbjuder?</h3><p>Som jag beskrivit ovan så använder jag express-generator för att skapa mitt projekt, med pug som template-motor. I övrigt använder jag generatorns grundinställningar.</p><h3>Jobbar du med Markdown för innehållet, eller annat liknande?</h3><p>För enkelhetens skull så använder jag nästan exakt samma markdown-filer som jag hade i ramverk1-kursen och lade dem i en content-mapp. Jag använde sedan jstransformer-markdown-it inuti mina Pug-filer för att kompilera filerna.</p>'
-    };
-
-    res.json(data);
+router.get("/reports/kmom", (req, res) => {
+    try {
+        report.getAll(res);
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({message: err});
+    }
 });
 
-router.get("/reports/kmom02", (req, res) => {
-    const data = {
-        title: 'Kursmoment 02',
-        content: '<h3>Har du jobbat med Docker eller andra virtualiseringstekniker innan?</h3><p>Docker är nytt för mig, även om jag stött på det tidigare när jag inventerade mina kunskapsbrister gällande PHP, där den dök upp som ett bra testverktyg med virtualisering. Tidigare har jag erfarenhet av VirtualBox samt Cordova som virtualiseringstekniker. VirtualBox är det ett bra tag sedan jag provade men jag har goda minnen av det, det kändes som ett mycket bra sätt att leka runt i en Linux-miljö. Cordova däremot var besvärligt vill jag minnas. Vi använde den i webapp-kursen och det var problem med att få den att kommunicera med yttre tjänster såsom kamera och liknande. Jag ställde mig därför aningen reserverat till Docker inledningsvis. Dessutom sitter jag just nu på en ganska klen laptop med endast 4GB RAM, så det finns en oro för att en massa virtuella maskiner och containers ska sänka min maskin.</p><h3>Hur ser du på möjligheterna att använda dig av Docker för att jobba med tester av ditt repo?</h3><p>Docker känns mycket lämpat för att kunna testa samma projekt i olika miljöer och olika versioner av exempelvis PHP eller Node. Exakt hur testerna ska gå till återstår att se, men man kan i alla fall nu se i all enkelhet att ens projekt rullar i olika miljöer, vilket är bra. Med hjälp av docker-compose känns det superenkelt att ställa upp en massa olika testmiljöer som kan köras samtidigt. Detta känns som en bra grund för organiserat och omfattande testande.</p><h3>Gick allt smidigt eller stötte du på problem?</h3><p>Docker känns som magi. Allting går alldeles för smidigt och snabbt och användbart för att vara sant. Visst bråkade det lite emellanåt, men jag tror att det var för att jag tagit bort images jag tänkte inte användes längre, men i själva verket behövdes de nånstans vilket ledde till sura miner från Docker. Det hela löstes dock enkelt med att rensa bort alla images och dra ner på nytt endast det jag behövde och bygga om mina egna images.</p><p>Vad är haken med Docker? Hur kan det fungera så smidigt? Jag märker att det laddas ner många stora images och mitt lagringsutrymme är rejält begränsat så jag har redan gjort det till en vana att rensa bland images med jämna mellanrum. Men annars då? Finns det en möjlighet att det blir tungrott i nåt skede med många containers? Projekten blir ju inte direkt lättviktiga. Samtidigt så är det detta Docker skryter med. Sammanfattningsvis så får jag alltså säga att första intrycket är väldigt positivt.</p><p>Det blir en del kommandon att komma ihåg med Docker. En del av de längre kommandona föll visserligen bort när jag gick över till Dockerfiles, men för att komma ihåg allt så sparar jag alla vanliga kommandon i min Makefile och package.json.</p><h3>Skapade du din egen image, berätta om den?</h3><p>Jag har skapat en image och laddat upp den till <a href="https://store.docker.com/community/images/emsa16/ramverk2-me">Docker Store</a>. Imagen har tre taggar för tre olika versioner av Node: 9, 8 och 6. Alla taggarna innehåller alpine-versioner av Node, vilket är en mer lättviktig variant. Jag har också uppdaterat min docker-compose så att den skapar containers från dessa images istället för att bygga miljön själv. Har man inte dessa images lokalt så laddas de ner när man kör <code>docker run</code>. Går man istället via kommandot <code>docker-compose up</code> så kommer images att byggas på basen av de Dockerfiles som också ligger i projektet.</p>'
-    };
-
-    res.json(data);
+router.get("/reports/kmom/:kmom", async (req, res) => {
+    try {
+        report.get(res, req.params);
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({message: err});
+    }
 });
 
-router.get("/reports/kmom03", (req, res) => {
-    const data = {
-        title: 'Kursmoment 03',
-        content: '<p>Sent omsider återupptar jag denna kurs. Eftersom det är så länge sedan jag jobbat senast med denna kurs och jag nu har lite mer tid så har jag gått igenom materialet för de två första kmomen på nytt och har även sneglat lite på innehållet i version 2 av ramverk2.</p><p>Jag har kastat ut Pug som vymotor och skapat en ny me-app med React på frontenden och Express på backenden. React ligger som statiska filer och servas via en nginx-server. Jag har skaffat mig en server på Digital Ocean och har där dels nginx snurrande och dels min Express-server som servar ett JSON REST API. Allt innehåll till sidorna i min me-app ligger nu lagrade i backenden.</p><p>Me-sidan ligger på <a href="https://me.emilsandberg.com">me.emilsandberg.com</a> och API:t är tillgängligt på <a href="https://api.emilsandberg.com">api.emilsandberg.com</a></p><p>Jag passar även på att gå över till att använda npm scripts helt och hållet istället för make, så från och med nu uppehålls inte Makefilen och det finns inga garantier för att make-kommandon kommer att fungera i framtiden. I frontend-repot går jag ytterligare ett steg och börjar använda yarn, eftersom denna fungerar bättre med React och löste en konflikt jag hade bland modulerna.</p><h3>Berätta vilka tekniker/verktyg du valde för enhetstester och kodtäckning och varför?</h3><p>Jag har valt att jobba med Jest för enhetstester och kodtäckning. Detta berodde främst på att Jest redan är en del av React så det kändes vettigast att använda samma verktyg på backend också. Dessutom så har Jest inbyggd kodtäckning med alternativet "--coverage" och ett verktyg känns enklare än två. Dessutom fick jag ett bättre intryck när jag besökte Jests hemsida än Mochas. Slutligen så är Jest aningen populärare än Mocha enligt senaste undersökningen från State of JS 2018 och jag vill tro att detta indikerar något.</p><h3>Berätta om din CI-kedja och reflektera över de valen du gjorde?</h3><p>Jag har valt att använda såväl Travis som Circle CI som byggverktyg, då de verkar fungera på lite olika sätt och det därför ibland är olika saker som får dem att misslyckas bygga projektet, vilket är bra att veta. Jag helgarderar mig alltså och det är inte mycket jobb att koppla projekten till bägge tjänsterna.</p><p>För kodkvalitet och kodtäckning har jag använt Code Climate och Better Code Hub. Återigen så ger de lite olika rapporter och det är bra med flera perspektiv. Jag uppskattar bägge tjänsternas gränssnitt och att de ger ett sammanfattande betyg men ger fler detaljer om man går in och kollar. Code Climate kan även visa kodtäckning. För det lägger jag in lite extra konfigurationer i .travis.yml, vilket gör att kodtäckningen som körs när Travis bygger skickas vidare till Code Climate, som kan visa resultatet.</p><h3>Reflektera över hur det gick att integrera enhetstesterna i olika Docker-kontainerns och om du ser någon nytta med detta.</h3><p>Jag gjorde om mina Docker containers lite grann för att detta skulle fungera väl. För det första ändrade jag vilka versioner av Node som ska köras i Docker så att det nu är version 8, 10 samt den senaste versionen som finns i Docker Store. Dessutom har jag ändrat så att mina Docker images inte innehåller själva appinnehållet, utan endast får tillgång till package.json så att de kan köra "npm install". Det är först sedan när containern skapas från imagen som projektfilerna blir tillgängliga i containern, node_modules undantaget, för med dem vill vi använda den version som finns färdigt i imagen. Detta gör att jag inte behöver bygga om mina images varje gång jag gör en liten förändring utan endast när något ändras i package.json. När detta väl var gjort så gick det bra att skapa ett nytt kommando "docker-compose run node-latest npm test", som startar upp containern, kör testerna och sedan stänger ner.</p><p>Det är rätt smidigt att köra enhetstester i olika versioner av Node med Docker, men med tanke på hur enkelt mitt projekt är just nu så gör det inte så värst stor nytta.</p><p>Jag har valt att inte använda mig av Docker alls i mitt frontend-repo. Detta motiverar jag med att produktionsversionen av frontenden lever endast i webbläsaren och består av statiska filer, så det spelar inte så stor roll i vilken miljö projektet finns i och att testa dem i Dockers med olika miljö känns som mer jobb än det ger nytta.</p><h3>Hur väl lyckades du utvärdera TDD-konceptet och vilka är dina reflektioner?</h3><p>Jag försökte skapa tester för mitt backend-repo men fick ge upp då de enda javascript-filer jag har startar upp en server, vilket är svårtestat. Filen bin/www returnerar inget och funktionerna i den går inte att testa då processen aldrig returnerar därifrån. app.js innehåller inga funktioner överhuvudtaget och inte routes/index.js heller. Jag har därför skapat en helt separat fil, sum.js, som inte har något med resten av projektet att göra, men den bevisar att enhetstestningen fungerar som den ska. Med nuvarande verktyg ser jag det svårt att kunna testa backenden i nuvarande form, som är väldigt enkel.</p><p>I frontend-delen får jag gratis med en teststruktur när jag scaffoldar fram min React-app. Jag har ett testfall som kollar att appen renderas utan att krascha. Detta test gör att några av mina filer blir 100% testade, medan större delen av filerna förblir otestade. Jag känner mig nöjd med detta som en början på mina tester, det känns inte oöverkomligt att kunna testa stora delar av min frontend.</p><h3>Berätta om tankarna kring din klient/server applikation och nämn de tekniker du använder.</h3><p>Jag kör här med samma tekniker som på me-sidan, Express för backend och React för frontend. De känns dugliga för tillfället och med tanke på att vi kommer att göra en realtidsapplikation så borde React vara ett bra val, där man har god kontroll över uppdatering av enskilda komponenter utan att behöva ladda om sidan, i klassisk SPA-stil.</p><p>Jag vet inte ännu riktigt vad jag ska göra för projekt. Någon form av realtidsspel tänker jag mig. Om realtidsaspekten visar sig vara svår så kanske det blir en chatt vid sidan av ett mer statiskt spel. </p><p>Än så länge driftar jag varken backend eller frontend någonstans och jag har inte kopplat samman dem på något sätt, jag låter kopplingen vänta tills jag lär mig mer om realtid i nästa moment och förstår vad jag behöver. Än så länge använder jag Docker endast i backend-delen, av samma orsak som jag förklarat gällande me-sidan ovan. Testsvit och CI-kedja är också identiska med me-sidans frontend och backend.</p><p><a href="https://me.emilsandberg.com">Me-sidan på DO</a></p><p><a href="http://www.student.bth.se/~emsa16/dbwebb-kurser/ramverk2/me/">Me-sidan på studentservern</a></p><p><a href="https://github.com/emsa16/ramverk2-api">Repo för backend</a></p><p><a href="https://github.com/emsa16/ramverk2-me">Repo för frontend</a></p>'
-    };
+router.post('/reports/create',
+    async (req, res, next) => {
+        try {
+            auth.checkToken(req, res, next);
+        } catch (err) {
+            console.log(err);
+            res.status(500).json({message: err});
+        }
+    },
+    async (req, res) => {
+        try {
+            report.create(res, req.body);
+        } catch (err) {
+            console.log(err);
+            res.status(500).json({message: err});
+        }
+    }
+);
 
-    res.json(data);
-});
+router.post('/reports/update',
+    async (req, res, next) => {
+        try {
+            auth.checkToken(req, res, next);
+        } catch (err) {
+            console.log(err);
+            res.status(500).json({message: err});
+        }
+    },
+    async (req, res) => {
+        try {
+            report.update(res, req.body);
+        } catch (err) {
+            console.log(err);
+            res.status(500).json({message: err});
+        }
+    }
+);
 
-router.get("/reports/kmom04", (req, res) => {
-    const data = {
-        title: 'Kursmoment 04',
-        content: '<h3>Är du ny på realtidsprogrammering eller har du gjort liknande tidigare?</h3><p>Detta med realtid är helt nytt för mig och sanningen att säga så har jag inte reflekterat direkt tidigare över vilka delar av webben som är realtid eller ej och vad det innebär i form av krav på den underliggande tekniken, så detta moment var en riktig ögonöppnare.</p><h3>Hur gick det att jobba med konceptet realtidsprogrammering i webben, några reflektioner?</h3><p>För mig gick det överraskande enkelt att komma igång. Nu är det ju förstås betydligt enklare att använda realtid idag när websockets finns, jämfört med tidigare, då jag kan tro att det måste ha varit betydligt krångligare. Jag ser också en massa spännande användningsområden för realtid och hoppas att jag kommer att kunna ta någon av mina idéer in i projektet, mer om det nedan.</p><h3>Berätta om din chatt som du integrerade i redovisa-sidan.</h3><p>Jag skapade ett eget repo för chatt-servern <a href="https://github.com/emsa16/chat-server/">här</a>. Det känns organiserat och naturligt att separera den på detta sätt och jag har ju redan gjort separata repon för min frontend och backend, så det var en naturlig fortsättning på det. Jag använder modulen ws och Express för att köra chatt-servern och driftar den som en separat tjänst på subdomänen <a href="https://ws.emilsandberg.com">ws.emilsandberg.com</a>.</p><p>Servern använder sig av ett mycket enkelt applikationsprotokoll i JSON-format. Än så länge stödjer den bara att skicka vanliga meddelanden och byta nick. Protokollet är specificerat på Github-sidan. För att kunna koppla upp sig mot servern så behöver man skicka med det nick man ska använda som en query-sträng. Skickar man inget nick så loggas man inte in på chatten. Servern kontrollerar också varifrån förfrågan kommer och godkänner endast förfrågningar från min me-sida, det vill säga där min just nu enda klient ligger.</p><p>Repot innehåller även en enkel klient i vanilla Javascript, men då frontenden på min me-sida är gjord i React så har jag en egen version av en chatt-klient där. Det visade sig kräva lite jobb att göra om klienten till React, men det visade sig vara väldigt lärorikt och gav mig en mycket bättre förståelse för hur komponenter fungerar i React.</p><p>Servern stödjer såväl broadcast- som echo-subprotokoll, men i klienten har jag endast implementerat broadcast. Servern har också stöd för att upptäcka och stänga ner trasiga kopplingar, genom att den med jämna mellanrum pingar alla klienter och stänger ner de som inte svarar.</p><p>Jag började med att utveckla servern och för att kunna testa den så använde jag wscat. Det var ett smidigt sätt att kunna testa utan att behöva bygga en klient först.</p><h3>Berätta om den realtidsfunktionalitet du väljer att integrera i din klient/server applikation.</h3><p>Jag skjuter upp implementationen av realtid tills jag vet mer, jag har lite idéer men är osäker på vad som är rimligt och möjligt med de verktyg vi ännu kommer att få under kursen. Jag har skrivit om en idé <a href="https://me.emilsandberg.com/app">här</a>. En annan idé jag funderade på är ett kollaborativt skrivverktyg, där flera användare kan simultanredigera samma textdokument, i stil med Google Docs. Detta kan dock bli lite för krångligt att implementera inom ramarna för denna kurs, men det är ett intressant användningsområde för realtid.</p><p><a href="https://me.emilsandberg.com">Me-sidan på DO</a></p><p><a href="http://www.student.bth.se/~emsa16/dbwebb-kurser/ramverk2/me/">Me-sidan på studentservern</a></p><p><a href="https://github.com/emsa16/ramverk2-api">Repo för backend</a></p><p><a href="https://github.com/emsa16/ramverk2-me">Repo för frontend</a></p>'
-    };
-
-    res.json(data);
-});
+router.post('/reports/delete',
+    async (req, res, next) => {
+        try {
+            auth.checkToken(req, res, next);
+        } catch (err) {
+            console.log(err);
+            res.status(500).json({message: err});
+        }
+    },
+    async (req, res) => {
+        try {
+            report.delete(res, req.body);
+        } catch (err) {
+            console.log(err);
+            res.status(500).json({message: err});
+        }
+    }
+);
 
 module.exports = router;

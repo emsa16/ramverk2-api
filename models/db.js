@@ -30,7 +30,7 @@ const database = {
             const client  = await mongo.connect(dsn, { useNewUrlParser: true });
             const db = await client.db();
             const col = await db.collection(colName);
-            const res = await col.find(criteria, projection).limit(limit).toArray();
+            const res = await col.find(criteria).project(projection).limit(limit).toArray();
 
             await client.close();
 
@@ -38,6 +38,14 @@ const database = {
         } catch (err) {
             console.log(err.stack);
         }
+    },
+
+
+
+    findByID: async function(colName, uid, projection, limit) {
+        const uidObject = new ObjectID(uid);
+
+        return this.find(colName, {_id: uidObject}, projection, limit);
     },
 
 
@@ -59,10 +67,36 @@ const database = {
 
 
 
-    findByID: async function(colName, uid, projection, limit) {
-        const uidObject = new ObjectID(uid);
+    updateOne: async function(colName, criteria, doc) {
+        try {
+            const client  = await mongo.connect(dsn, { useNewUrlParser: true });
+            const db = await client.db();
+            const col = await db.collection(colName);
+            const res = await col.updateOne(criteria, {$set: doc});
 
-        return this.find(colName, {_id: uidObject}, projection, limit);
+            await client.close();
+
+            return res;
+        } catch (err) {
+            console.log(err.stack);
+        }
+    },
+
+
+
+    deleteOne: async function(colName, criteria) {
+        try {
+            const client  = await mongo.connect(dsn, { useNewUrlParser: true });
+            const db = await client.db();
+            const col = await db.collection(colName);
+            const res = await col.deleteOne(criteria);
+
+            await client.close();
+
+            return res;
+        } catch (err) {
+            console.log(err.stack);
+        }
     }
 };
 
