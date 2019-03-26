@@ -9,6 +9,10 @@
 ## Krav
 Node och npm behöver finnas installerade.
 
+API:t utgår även från att en Mongo-databas är igång och servar data från katalogen ./data/db. Med environment-variabeln DBWEBB_DSN kan man ange adress till Mongo-databasen.
+
+Det behöver finnas en environment-variabel vid namn JWT_SECRET i miljön för att JWT-tokens ska kunna skapas och autentiseringar skötas.
+
 ## Installera projektet
 
     $ git clone https://github.com/emsa16/ramverk2-api
@@ -36,6 +40,7 @@ Servern erbjuder ett enkelt JSON API med innehåll til me-sidan. JSON-svaren inn
     $ npm run test1            # Kör npm test inuti node1-containern
     $ npm run test2            # Kör npm test inuti node2-containern
     $ npm run test3            # Kör npm test inuti node3-containern
+    $ npm run mongodb          # Startar upp en container som kör mongodb på port 27017, utgående från databasen i ./data/db
 
 ## Ladda ner projektets Docker-image
 https://store.docker.com/community/images/emsa16/ramverk2-me
