@@ -76,9 +76,9 @@ const auth = {
             const uid = decoded.uid;
 
             if (uid) {
-                const res = await db.findByID("users", uid, {}, 1);
+                const result = await db.findByID("users", uid, {}, 1);
 
-                if (!res.length) {
+                if (!result.length) {
                     console.log("Missing user");
                     return res.status(500).json({message: "Missing user"});
                 }
