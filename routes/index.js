@@ -105,7 +105,7 @@ router.get("/reports", (req, res) => {
 
 router.get("/reports/kmom", (req, res) => {
     try {
-        report.getAll(res);
+        report.getAllKmom(res);
     } catch (err) {
         console.log(err);
         res.status(500).json({message: err});

@@ -34,7 +34,22 @@ const report = {
     getAll: async function(res) {
         const projection = {'kmom': 1, '_id': 0};
         const result = await db.find("reports", {}, projection, 100);
-        const routes = await result.map(x => "kmom/" + x.kmom);
+        let routes = await result.map(x => "kmom/" + x.kmom);
+
+        routes.push("create", "update", "delete");
+
+        const data = {
+            title: "Redovisningar",
+            routes: routes
+        };
+
+        return res.json(data);
+    },
+
+    getAllKmom: async function(res) {
+        const projection = {'kmom': 1, '_id': 0};
+        const routes = await db.find("reports", {}, projection, 100);
+
         const data = {
             title: "Redovisningar",
             routes: routes
