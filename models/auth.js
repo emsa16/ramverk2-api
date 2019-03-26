@@ -19,6 +19,13 @@ const auth = {
             return res.status(401).json({message: "Username or password missing"});
         }
 
+        const result = await db.find("users", {username: username}, {}, 1);
+
+        if (result.length) {
+            console.log("User already exists");
+            return res.status(401).json({message: "User already exists"});
+        }
+
         const hash = await bcrypt.hash(password, saltRounds);
         const doc = {
             "username": username,

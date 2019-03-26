@@ -9,6 +9,14 @@ const db = require('./db.js');
 
 const report = {
     create: async function(res, body) {
+        const kmom = body.kmom;
+        const result = await db.find("reports", {"kmom": kmom}, {}, 1);
+
+        if (result.length) {
+            console.log("Kmom already exists");
+            return res.status(401).json({message: "Kmom already exists"});
+        }
+
         const doc = {
             "kmom": body.kmom,
             "title": body.title,
