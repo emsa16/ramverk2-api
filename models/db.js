@@ -6,7 +6,7 @@
 // MongoDB
 const mongo = require("mongodb").MongoClient;
 const ObjectID = require('mongodb').ObjectID;
-const dsn =  process.env.DBWEBB_DSN || "mongodb://localhost:27017/test";
+const dsn =  process.env.DBWEBB_DSN || "mongodb://localhost:27017/meapp";
 
 
 

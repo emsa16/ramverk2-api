@@ -56,7 +56,7 @@ const auth = {
         const token = jwt.sign(payload, jwtSecret, { expiresIn: '1h'});
 
         console.log(token);
-        return res.json({token: token});
+        return res.json({token: token, message: "Login successful"});
     },
 
     checkToken: async function(req, res, next) {
@@ -80,7 +80,7 @@ const auth = {
 
                 if (!res.length) {
                     console.log("Missing user");
-                    res.status(500).json({message: "Missing user"});
+                    return res.status(500).json({message: "Missing user"});
                 }
 
                 console.log("Valid token");
