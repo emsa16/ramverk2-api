@@ -48,6 +48,14 @@ router.get("/app", (req, res) => {
     res.json(data);
 });
 
+router.get("/module", (req, res) => {
+    const data = {
+        msg: '<h1>Min NPM-modul</h1><p>Jag har valt att göra min chat-server till en NPM-modul och den ligger nu publicerad <a href="https://www.npmjs.com/package/@emsa16/chat-server">här</a>.</p><p>Hur man installerar och använder modulen finns beskrivet i README-filen, så jag tänker främst lyfta fram en tanke kring modulariseringen. Det känns nämligen inte helt klockrent att använda denna del som modul, även om den fungerar väldigt bra på många sätt i och med att den är väldigt fristående från resten av projektet. Problemet är att den egentligen funkar bättre att ha som en helt självständig tjänst än att inkludera den i ett annat projekt. Jag har testat inkludera den som en NPM-modul i backend-delen av min redovisa-sida och när man då kör koden så startas samtidigt JSON-servern och WS-servern. Smidigare tycker jag ändå är att ladda ner Github-repot och köra npm install + npm start i en egen terminal, men båda alternativen funkar lika bra.</p>'
+    };
+
+    res.json(data);
+});
+
 router.get('/register', async (req, res) => {
     res.status(405).json({msg: "This route only supports POST requests."});
 });
