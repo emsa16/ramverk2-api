@@ -12,7 +12,7 @@
     "preclean-all": "npm run clean",
     "clean-all": "rm -rf .bin vendor node_modules package-lock.json",
     "pretest": "npm run htmlhint && npm run stylelint && npm run eslint",
-    "test": "jest --coverage",
+    "test": "jest --coverage --verbose --silent --detectOpenHandles",
     "start": "nodemon ./bin/www",
     "production": "NODE_ENV='production' node ./bin/www",
     "tag-prepare": "grep version package.json && git describe --abbrev=0 && git status",
@@ -60,6 +60,7 @@
     "jsonlint": "^1.6.3",
     "nodemon": "^1.18.9",
     "stylelint": "^9.10.1",
+    "supertest": "^4.0.2",
     "uglify-es": "^3.3.9"
   },
   "dependencies": {
