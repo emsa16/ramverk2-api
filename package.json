@@ -12,7 +12,7 @@
     "preclean-all": "npm run clean",
     "clean-all": "rm -rf .bin vendor node_modules package-lock.json",
     "pretest": "npm run htmlhint && npm run stylelint && npm run eslint",
-    "test": "jest --coverage --verbose --silent --detectOpenHandles",
+    "test": "jest --coverage --verbose --silent",
     "start": "nodemon ./bin/www",
     "production": "NODE_ENV='production' node ./bin/www",
     "tag-prepare": "grep version package.json && git describe --abbrev=0 && git status",
