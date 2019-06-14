@@ -8,7 +8,7 @@
 
 Detta repo är ena halvan av min redovisa-sida. Detta är backend-delen och är byggd med Express. Databasmodulen använder sig av Mongo. Autentisering sköts med hjälp av JSON Webtokens. Det finns Docker-filer tillgängliga för att kunna köra projektet i olika målmiljöer.
 
-Servern erbjuder ett enkelt JSON API med innehåll til redovisa-sidan. JSON-svaren innehåller också anvisningar om vilka router som finns tillgängliga.
+Servern erbjuder ett enkelt JSON API med innehåll till redovisa-sidan. JSON-svaren innehåller också anvisningar om vilka router som finns tillgängliga.
 
 
 ## Krav
