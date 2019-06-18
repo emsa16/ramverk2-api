@@ -6,7 +6,7 @@
 [![Test Coverage](https://api.codeclimate.com/v1/badges/05c9f378777ee2bf5a75/test_coverage)](https://codeclimate.com/github/emsa16/ramverk2-api/test_coverage)
 [![BCH compliance](https://bettercodehub.com/edge/badge/emsa16/ramverk2-api?branch=master)](https://bettercodehub.com/results/emsa16/ramverk2-api)
 
-Detta repo är ena halvan av min redovisa-sida. Detta är backend-delen och är byggd med Express. Databasmodulen använder sig av Mongo. Autentisering sköts med hjälp av JSON Webtokens. Det finns Docker-filer tillgängliga för att kunna köra projektet i olika målmiljöer.
+Detta repo är ena halvan av min redovisa-sida. Detta är backend-delen och är byggd med Express. Databasmodulen använder sig av Mongo. Autentisering sköts med hjälp av JSON Webtokens och lösenord med bcrypt. Det finns Docker-filer tillgängliga för att kunna köra projektet i olika målmiljöer.
 
 Servern erbjuder ett enkelt JSON API med innehåll till redovisa-sidan. JSON-svaren innehåller också anvisningar om vilka router som finns tillgängliga.
 
